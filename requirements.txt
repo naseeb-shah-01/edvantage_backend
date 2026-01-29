@@ -63,8 +63,8 @@ pycparser==2.23
 
 pydantic-settings==2.1.0
 
-pydantic>=2.5.0
-pydantic-core>=2.14.5
+pydantic-core==2.14.6 --only-binary :all:
+pydantic==2.5.0
 fastapi>=0.104.0
 pyflakes==3.1.0
 pytest==7.4.3
