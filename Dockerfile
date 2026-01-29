@@ -13,8 +13,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port Railway will use
-
-
-# Run the app with Uvicorn (make sure this matches your railway.json startCommand)
-CMD ["uvicorn", "aap.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the app with Uvicorn (Shell form for variable expansion)
+CMD uvicorn aap.main:app --host 0.0.0.0 --port $PORT
