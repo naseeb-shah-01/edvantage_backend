@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from datetime import datetime
 from app.schemas.lesson import LessonResponse
+from app.schemas.user import UserResponse
 
 class Course(BaseModel):
     
@@ -55,6 +56,10 @@ class CourseResponseWithSections(BaseModel):
     price: int
     is_free: bool
     is_published: bool
+    duration: int | None
+    created_at: datetime
+    instructor:UserResponse
+    
     sections: list[CourseSectionResponse]
 
     class Config:

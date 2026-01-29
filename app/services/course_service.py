@@ -34,8 +34,9 @@ class CourseService:
         course = (
             db.query(Course)
             .options(
-                joinedload(Course.sections)
-                .joinedload(CourseSection.lessons)  # ✅ FIXED
+                joinedload(Course.instructor),
+                joinedload(Course.sections).
+                    joinedload(CourseSection.lessons)  # ✅ FIXED
             )
             .filter(Course.id == course_id)
             .first()
