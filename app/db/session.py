@@ -1,16 +1,22 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base
+from config import settings
 
 # Use SQLite for simplicity (easy to start)
-SQLALCHEMY_DATABASE_URL = "sqlite:///./learning.db"
+DATABASE_URL = settings.DATABASE_URL
 
 # Create engine
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False}  # Needed for SQLite
-)
-
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False}
+    )
+else:
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True
+    )
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
