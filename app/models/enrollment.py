@@ -17,4 +17,5 @@ class Enrollment(Base):
 
     user = relationship("User", back_populates="enrollments")
     course = relationship("Course", back_populates="enrollments")
+    
     paymentStatus=Column(Integer,default=0)  # 0 for unpaid, 1 for paid
