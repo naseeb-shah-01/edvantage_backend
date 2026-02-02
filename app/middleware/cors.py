@@ -4,9 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173","https://edvan.vercel.app"
+    "http://localhost:3000"
+    ,
+    "https://www.edvantage.org.in/"
 ]
 
 app.add_middleware(
