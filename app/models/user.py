@@ -3,11 +3,12 @@ from sqlalchemy.sql import func
 from app.db.session import Base 
 from sqlalchemy.orm import relationship
 import enum
+from sqlalchemy.dialects.postgresql import JSONB
 
  # ✅ IMPORT SAME BASE
 
 print("User model loaded")
-import enum
+
 
 class UserRole(str, enum.Enum):
     admin = "admin"
@@ -23,6 +24,10 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     full_name = Column(String, nullable=False)
+    contact=Column(String, nullable=True)
+    expertise=Column(JSONB, nullable=True)
+    whatsapp=Column(String, nullable=True)
+    collage=Column(String, nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     courses = relationship(
         "Course",
@@ -36,6 +41,11 @@ class User(Base):
     )
     enrollments = relationship(
         "Enrollment",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+    addresses = relationship(
+        "Address",
         back_populates="user",
         cascade="all, delete-orphan"
     )

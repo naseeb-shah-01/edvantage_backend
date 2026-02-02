@@ -14,6 +14,7 @@ class ProgressMapperService:
         mapped_progress = []
 
         for progress in self.progress_records:
+            print("Mapping progress record:", progress)
             record = {
                 "id": progress.id,
                 "trackable_type": progress.trackable_type,
@@ -24,7 +25,7 @@ class ProgressMapperService:
             }
 
             # attach section details
-            if progress.trackable_type == "section":
+            if progress.trackable_type == "TEXT":
                 record["section"] = self.section_map.get(
                     progress.trackable_id
                 )

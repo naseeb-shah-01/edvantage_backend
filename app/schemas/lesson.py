@@ -34,8 +34,7 @@ class LessonResponse(BaseModel):
     id: int
     section_id: int
     title: str
-    lesson_type: LessonType
-
+    lesson_type: str
     video_url: Optional[str]
     content: Optional[str]
 
@@ -43,4 +42,5 @@ class LessonResponse(BaseModel):
     is_free_preview: bool
 
     class Config:
-        from_attributes = True   # Pydantic v2
+        from_attributes = True 
+         # Pydantic v2

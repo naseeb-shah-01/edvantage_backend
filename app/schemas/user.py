@@ -1,35 +1,49 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+
+from typing import Optional,List
 from datetime import datetime
+import enum
+from app.schemas.address import AddressCreate, AddressResponse
 
-class UserBase(BaseModel):
-    """Base fields for user"""
+class UserRole(str, enum.Enum):
+    admin = "admin"
+    instructor = "instructor"
+    student = "student"
+
+class UserCreate(BaseModel):
     email: EmailStr
-    full_name: str = Field(..., min_length=2, max_length=100)
-    role: Optional[str] = "student"  # default role
+    password: str = Field(..., min_length=8)
+    full_name: str
 
-class UserCreate(UserBase):
-    """Data required to create a user"""
-    password: str = Field(..., min_length=6, max_length=100)
-    confirm_password: str
-    
-    # Check if passwords match
-    def check_passwords_match(self):
-        if self.password != self.confirm_password:
-            raise ValueError("Passwords do not match")
-        return True
+    contact: Optional[str] = None
+    whatsapp: Optional[str] = None
+    collage: Optional[str] = None
+    expertise: Optional[list[str]] = None
 
-class UserResponse(UserBase):
-    """What we send back to the user"""
-    id: int
-    is_active: bool
-    created_at: datetime
-    
-    # This tells Pydantic to read from SQLAlchemy model
-    class Config:
-        from_attributes = True
+    role: Optional[UserRole] = UserRole.student
 
+    # ✅ Address on signup
+    addresses: Optional[List[AddressCreate]] = None
 # For login
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+class UserResponse(BaseModel):
+    id: int
+    email: EmailStr
+    full_name: str
+    contact: Optional[str]
+    whatsapp: Optional[str]
+    collage: Optional[str]
+    expertise: Optional[list[str]]
+
+    role: UserRole
+    is_active: bool
+    created_at: datetime
+
+    addresses: List[AddressResponse] = []
+    access_token: Optional[str] 
+    
+
+    class Config:
+        orm_mode = True
