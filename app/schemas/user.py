@@ -10,6 +10,10 @@ class UserRole(str, enum.Enum):
     instructor = "instructor"
     student = "student"
 
+class UserType(str,enum.Enum):
+    student="student"
+    professional="professional"
+    
 class UserCreate(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8)
@@ -21,6 +25,7 @@ class UserCreate(BaseModel):
     expertise: Optional[list[str]] = None
 
     role: Optional[UserRole] = UserRole.student
+    user_type:str
 
     # ✅ Address on signup
     addresses: Optional[List[AddressCreate]] = None

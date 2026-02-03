@@ -15,6 +15,11 @@ class UserRole(str, enum.Enum):
     instructor = "instructor"
     student = "student"
 
+class UserType(str,enum.Enum):
+    student="student"
+    professional="professional"
+    
+ 
 
 class User(Base):
     __tablename__ = "users"
@@ -28,6 +33,8 @@ class User(Base):
     expertise=Column(JSONB, nullable=True)
     whatsapp=Column(String, nullable=True)
     collage=Column(String, nullable=True)
+    user_type = Column(Enum(UserType,name="user_type"),nullable=False)
+
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     courses = relationship(
         "Course",

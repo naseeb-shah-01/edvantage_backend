@@ -34,7 +34,9 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
         whatsapp=user_data.whatsapp,
         collage=user_data.collage,
         expertise=user_data.expertise,
-        role=user_data.role
+        role=user_data.role,
+        user_type=user_data.user_type,
+        
     )
 
     db.add(new_user)
