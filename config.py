@@ -9,13 +9,13 @@ class Settings(BaseSettings):
     # Email Configuration (NEW)
     SMTP_HOST: str = "smtp.gmail.com"  # Default value
     SMTP_PORT: int = 587
-    SMTP_USER: str
-    SMTP_PASSWORD: str
+    SMTP_USER: str="sai"
+    SMTP_PASSWORD: str="sai"
     SMTP_USE_TLS: bool = True
     
     # Email From Details
     EMAIL_FROM_NAME: str = "Student Platform"
-    EMAIL_FROM_ADDRESS: str
+    EMAIL_FROM_ADDRESS: str="jajaj"
     
     # Templates Directory (relative to your project root)
     EMAIL_TEMPLATES_DIR: str = "email-templates"
