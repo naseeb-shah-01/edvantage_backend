@@ -11,12 +11,21 @@ class CourseBase(BaseModel):
     description: Optional[str] = None
     category: Optional[str] = None
     price: int
-    duration: Optional[int] = None  # duration in minutes
+    duration: Optional[int] = None  
     is_published: bool = False
 
     outcomes: Optional[List[str]] = None
     curriculum: Optional[List[str]] = None
     target_audience: Optional[List[str]] = None
+    
+    videoUrl:Optional[str] = None
+    thumbUrl:Optional[str]=None
+    
+    image:Optional[str]
+    r_pay:Optional[str]
+    d_pay:Optional[str]
+    
+
 
 class CourseCreate(CourseBase):
     title: str = Field(..., min_length=2, max_length=255)

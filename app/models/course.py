@@ -13,6 +13,12 @@ class Course(Base):
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     category = Column(String(100), nullable=True)
+    videoUrl=Column(String,nullable=True)
+    thumbUrl=Column(String,nullable=True)
+    image=Column(String,nullable=True)
+    r_pay=Column(String,nullable=True)
+    d_pay=Column(String,nullable=True)
+    
 
     instructor_id = Column(
         Integer,
