@@ -5,7 +5,8 @@ from app.schemas.user import UserCreate, UserResponse, UserLogin
 from app.core.security import hash_password, verify_password, create_access_token
 from app.db.session import get_db  # Import from our new file
 from app.models.user import User
-from app.models.address import Address  # Clean import
+from app.models.address import Address 
+from app.services.email import EmailService # Clean import
 
 router = APIRouter()
 
@@ -14,7 +15,7 @@ router = APIRouter()
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED
 )
-def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
+async def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     """Register a new user with optional addresses"""
 
     # 🔹 Check if user already exists
@@ -50,7 +51,8 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
             "role": user_data.role   # admin / instructor / student
         }
     )
-    print("Access Token:", access_token)
+    
+    
     if user_data.addresses:
         primary_found = False
 
@@ -79,6 +81,12 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
     db.commit()
     db.refresh(new_user)
+    emailService=EmailService()
+    await emailService.send_student_welcome(
+        new_user.email,
+        new_user.full_name,
+        new_user.id
+    )
 
 
     return {"access_token":access_token, **new_user.__dict__}

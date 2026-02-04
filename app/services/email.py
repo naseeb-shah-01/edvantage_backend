@@ -13,14 +13,15 @@ logger = logging.getLogger(__name__)
 class EmailService:
     def __init__(self):
         # Use settings from your existing config
-        self.smtp_host = settings.SMTP_HOST
-        self.smtp_port = settings.SMTP_PORT
+        self.smtp_host = "smtp.gmail.com"
+        self.smtp_port = 465
+        
         self.smtp_user = settings.SMTP_USER
         self.smtp_password = settings.SMTP_PASSWORD
         self.use_tls = settings.SMTP_USE_TLS
         self.from_name = settings.EMAIL_FROM_NAME
         self.from_address = settings.EMAIL_FROM_ADDRESS
-        
+        print("sett",settings.SMTP_PASSWORD,settings.SMTP_USER)
         # Setup templates if directory exists
         template_dir = Path(settings.EMAIL_TEMPLATES_DIR)
         if template_dir.exists():
@@ -58,6 +59,7 @@ class EmailService:
                 use_tls=self.use_tls
             ) as smtp:
                 await smtp.login(self.smtp_user, self.smtp_password)
+                print("Login")
                 await smtp.send_message(message)
             
             logger.info(f"Email sent to {to_email}")
@@ -72,59 +74,91 @@ class EmailService:
         self,
         student_email: str,
         student_name: str,
-        student_id: str,
-        verification_token: str = None
+        student_id:str
+        
     ) -> bool:
         """Send welcome email to new student"""
         
         # Build verification link if token provided
-        verification_link = ""
-        if verification_token and hasattr(settings, 'FRONTEND_URL'):
-            verification_link = f"{settings.FRONTEND_URL}/verify/{verification_token}"
+        
         
         # Simple HTML email (no template required)
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6;">
-            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-                <div style="background: #4CAF50; color: white; padding: 20px; text-align: center;">
-                    <h1>🎓 Welcome to Student Platform!</h1>
-                </div>
-                
-                <div style="padding: 20px; background: #f9f9f9;">
-                    <h2>Hello {student_name},</h2>
-                    <p>Your student account has been successfully created.</p>
-                    
-                    <div style="background: white; padding: 15px; margin: 20px 0; border-radius: 5px;">
-                        <h3>Your Student Details:</h3>
-                        <p><strong>Student ID:</strong> {student_id}</p>
-                        <p><strong>Email:</strong> {student_email}</p>
+        html_content =f"""
+                <!DOCTYPE html>
+                <html>
+                <body style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+                    <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
+                        
+                        <div style="background: #0f4c81; color: #ffffff; padding: 25px; text-align: center;">
+                            <h1>🎓 Welcome to Edvantage</h1>
+                            <p>Empowering oil & gas professionals</p>
+                        </div>
+
+                        <div style="padding: 25px; color: #333;">
+                            <h2>Hello {student_name},</h2>
+                            
+                            <p>
+                                Welcome to <strong>Edvantage</strong> — your learning platform for
+                                world-class training, consultancy, and industry connections in the
+                                oil & gas sector.
+                            </p>
+
+                            <div style="background: #f1f5f9; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                                <p><strong>Student ID:</strong> ED-LE-{student_id}</p>
+                                <p><strong>Email:</strong> {student_email}</p>
+                            </div>
+
+                          <p>
+    You can now log in and begin your learning journey with us.
+</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="https://www.edvantage.org.in/login"
+       target="_blank"
+       style="
+            display: inline-block;
+            background-color: #0f4c81;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+       ">
+        🔐 Log in to Edvantage
+    </a>
+</div>
+
+<p style="font-size: 14px; color: #666;">
+    If the button doesn’t work, copy and paste this link into your browser:<br>
+    <a href="https://www.edvantage.org.in/login" target="_blank">
+        https://www.edvantage.org.in/login
+    </a>
+</p>
+
+
+                            <p>
+                                Best regards,<br>
+                                <strong>Edvantage Team</strong>
+                            </p>
+                        </div>
+
+                        <div style="background: #f9fafb; padding: 15px; text-align: center; font-size: 14px;">
+                            <p>Connect with us</p>
+                            <a href="https://www.linkedin.com/company/edvantagelearning/" target="_blank">LinkedIn</a> |
+                            <a href="https://www.youtube.com/@edvantagelearning3858" target="_blank">YouTube</a> |
+                            <a href="https://www.instagram.com/edvantage_learning" target="_blank">Instagram</a>
+                        </div>
+
                     </div>
-                    
-                    {verification_link and f'''
-                    <div style="text-align: center; margin: 25px 0;">
-                        <a href="{verification_link}" 
-                           style="background: #2196F3; color: white; padding: 12px 24px; 
-                                  text-decoration: none; border-radius: 5px;">
-                            Verify Your Email
-                        </a>
-                    </div>
-                    '''}
-                    
-                    <p>You can now login to your student portal.</p>
-                    
-                    <p>Best regards,<br>
-                    <strong>{self.from_name}</strong></p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
+                </body>
+                </html>
+                """
+        
         
         return await self.send_email(
             to_email=student_email,
-            subject=f"Welcome {student_name}! - Student Platform",
+            subject=f"Welcome {student_name}! - Edvantage Learning",
             html_content=html_content
         )
     
@@ -135,21 +169,17 @@ class EmailService:
     ) -> bool:
         """Send password reset email"""
         
-        reset_link = f"{settings.FRONTEND_URL}/reset-password/{reset_token}"
         
-        html_content = f"""
-        <div style="padding: 20px;">
-            <h2>Password Reset Request</h2>
-            <p>Click the link below to reset your password:</p>
-            <a href="{reset_link}" 
-               style="background: #FF5722; color: white; padding: 10px 20px; 
-                      text-decoration: none; border-radius: 5px; display: inline-block;">
-                Reset Password
-            </a>
-            <p>This link will expire in 24 hours.</p>
-            <p>If you didn't request this, please ignore this email.</p>
-        </div>
-        """
+        
+              
+
+
+
+
+
+
+
+
         
         return await self.send_email(
             to_email=email,
