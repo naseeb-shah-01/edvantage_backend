@@ -14,7 +14,7 @@ class EmailService:
     def __init__(self):
         # Use settings from your existing config
         self.smtp_host = "smtp.gmail.com"
-        self.smtp_port = settings.SMTP_PORT,
+        self.smtp_port = 587,
         self.start_tls=True,
         self.smtp_user = settings.SMTP_USER
         self.smtp_password = settings.SMTP_PASSWORD
