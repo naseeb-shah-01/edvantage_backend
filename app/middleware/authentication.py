@@ -29,7 +29,7 @@ class TokenMiddleware(BaseHTTPMiddleware):
 
         if not auth_header or not auth_header.startswith("Bearer "):
             return JSONResponse(
-                status_code=401,
+                status_code=403,
                 content={"detail": "Missing token"}
             )
 
@@ -45,7 +45,7 @@ class TokenMiddleware(BaseHTTPMiddleware):
 
         except JWTError:
             return JSONResponse(
-                status_code=401,
+                status_code=405,
                 content={"detail": "Invalid token"}
             )
 
