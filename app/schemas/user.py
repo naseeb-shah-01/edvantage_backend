@@ -23,6 +23,7 @@ class UserCreate(BaseModel):
     whatsapp: Optional[str] = None
     collage: Optional[str] = None
     expertise: Optional[list[str]] = None
+    interest:Optional[list[str]]=None
 
     role: Optional[UserRole] = UserRole.student
     user_type:str
