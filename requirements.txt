@@ -97,7 +97,7 @@ watchfiles==1.1.1
 wcwidth==0.2.14
 websockets==16.0
 aiosmtplib>=5.1.0
-cloudinary==1.41.1
+cloudinary==1.41.0
 
 
 
