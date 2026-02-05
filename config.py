@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "https://www.edvantage.org.in/"
     VERIFICATION_PATH: str = "/verify-email"
     RESET_PASSWORD_PATH: str = "/reset-password"
+    # file upload files 
+    cloud_name:str
+    api_key:str
+    api_secret:str
     
     class Config:
         env_file = ".env"

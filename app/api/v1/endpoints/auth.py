@@ -76,7 +76,7 @@ async def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
                 address_type=addr.address_type,
                 is_primary=addr.is_primary
             )
-            print( address)
+            
             db.add(address)
 
     db.commit()

@@ -3,11 +3,16 @@ from app.api.v1.api import v1_router  # Import from api.py
 from app.db.session import create_tables
 from app.middleware.authentication import TokenMiddleware
 from fastapi.middleware.cors import CORSMiddleware
-
+from  app.services.cloudinary_config import cloudinary
 app = FastAPI(title="My FastAPI Application", version="1.0.0")
 
 create_tables()
 print("Database tables created.")
+@app.on_event("startup")
+async def startup_event():
+    # This ensures Cloudinary is configured when app starts
+    print("Cloudinary configured successfully!")
+    print(f"Cloud Name: {cloudinary.config().cloud_name}")
 
 @app.get("/")
 def read_root():
