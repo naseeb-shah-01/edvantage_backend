@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status,Depends
-from app.schemas.course import CourseCreate, CourseResponse,AllCourses,CourseResponseWithSections
+from app.schemas.course import CourseCreate, CourseResponse,AllCourses,CourseResponseWithSections,CourseBulkCreateResponse
+from typing import List
 
 router= APIRouter()
 from sqlalchemy.orm import Session
@@ -10,17 +11,29 @@ from  app.services.course_service import CourseService
 
 @router.post(
     "/", 
-    response_model=CourseResponse, 
+        response_model=CourseBulkCreateResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Create a new course",
     description="Create a new course. Only instructors and admins can create courses."
 )
-async def create_course(course_data:CourseCreate,db: Session = Depends(get_db)  ):
+async def create_courses(
+    courses_data: List[CourseCreate],
+    db: Session = Depends(get_db)
+):
     try:
-        # Assuming instructor_id is obtained from the authenticated user context
-        instructor_id = 1  # Placeholder for actual instructor ID retrieval logic
-        course = CourseService.create_course(db, course_data, instructor_id)
-        return course
+        instructor_id = 1  # TODO: replace with auth-based instructor ID
+
+        created_courses = []
+        for course_data in courses_data:
+            course = CourseService.create_course(db, course_data, instructor_id)
+            created_courses.append(course)
+
+        return {
+            "message": "Courses created successfully",
+            "count": len(created_courses),
+            "data": created_courses
+        }
+
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 @router.get("/all", response_model=list[CourseResponse], status_code=status.HTTP_200_OK,)

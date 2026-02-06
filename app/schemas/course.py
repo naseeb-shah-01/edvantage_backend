@@ -11,7 +11,7 @@ class CourseBase(BaseModel):
     description: Optional[str] = None
     category: Optional[str] = None
     price: int
-    duration: Optional[int] = None  
+    duration: Optional[str]  
     is_published: bool = False
 
     outcomes: Optional[List[str]] = None
@@ -21,9 +21,16 @@ class CourseBase(BaseModel):
     videoUrl:Optional[str] = None
     thumbUrl:Optional[str]=None
     
-    image:Optional[str]
-    r_pay:Optional[str]
-    d_pay:Optional[str]
+    image:Optional[str]=None
+    r_pay:Optional[str]=None
+    d_pay:Optional[str]=None
+    domain:Optional[str]=None
+    for_mat:Optional[str]=None
+    certificate:bool
+    brochure:Optional[str]=None
+    d_price:int
+    level:Optional[str]=None
+    overview:str
     
 
 
@@ -41,7 +48,10 @@ class CourseResponse(CourseBase):
         orm_mode = True
 
 
-
+class CourseBulkCreateResponse(BaseModel):
+    message: str
+    count: int
+    data: List[CourseResponse]
 
 
 

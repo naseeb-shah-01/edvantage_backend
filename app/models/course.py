@@ -18,6 +18,14 @@ class Course(Base):
     image=Column(String,nullable=True)
     r_pay=Column(String,nullable=True)
     d_pay=Column(String,nullable=True)
+    domain=Column(String,nullable=True)
+    for_mat=Column(String,nullable=True)
+    certificate=Column(Boolean,default=False)
+    brochure=Column(String,nullable=False)
+    d_price=Column(Integer,nullable=False,default=0)
+    level=Column(String,nullable=True)
+    overview=Column(String,nullable=True)
+    
     
 
     instructor_id = Column(
@@ -32,7 +40,8 @@ class Course(Base):
     )
 
     price = Column(Integer, nullable=False, default=0)
-    duration = Column(Integer, nullable=True)  # minutes
+    
+    duration = Column(String, nullable=False)  # minutes
     is_published = Column(Boolean, default=False)
     is_free = Column(Boolean, default=False)
 
