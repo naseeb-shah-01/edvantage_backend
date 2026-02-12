@@ -1,18 +1,15 @@
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-origins = [
-    "http://localhost:3000",
-    "https://edvantage.org.in",
-    "https://www.edvantage.org.in",
-]
-
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=[
+        "https://edvantage.org.in",
+        "https://www.edvantage.org.in",
+        "http://localhost:3000",
+    ],
+    allow_credentials=False,  # IMPORTANT
     allow_methods=["*"],
     allow_headers=["*"],
 )
