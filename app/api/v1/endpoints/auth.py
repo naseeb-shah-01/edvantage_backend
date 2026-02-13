@@ -82,11 +82,11 @@ async def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     emailService=EmailService()
-    await emailService.send_student_welcome(
-        new_user.email,
-        new_user.full_name,
-        new_user.id
-    )
+    # await emailService.send_student_welcome(
+    #     new_user.email,
+    #     new_user.full_name,
+    #     new_user.id
+    # )
 
 
     return {"access_token":access_token, **new_user.__dict__}
