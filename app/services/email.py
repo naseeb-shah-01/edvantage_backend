@@ -55,8 +55,8 @@ class EmailService:
             
             async with aiosmtplib.SMTP(
                 hostname=self.smtp_host,
-                port=self.smtp_port,
-                use_tls=self.use_tls
+                port=465,
+                use_tls=True
             ) as smtp:
                 await smtp.login(self.smtp_user, self.smtp_password)
                 print("Login")
