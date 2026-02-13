@@ -19,6 +19,8 @@ PUBLIC_PATHS = {
 
 class TokenMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS":
+            return await call_next(request)
         path = request.url.path
 
         # Allow public routes
@@ -26,8 +28,10 @@ class TokenMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         auth_header = request.headers.get("Authorization")
+        print(f"Authorization header: {auth_header}")  # Debugging line
 
         if not auth_header or not auth_header.startswith("Bearer "):
+            print("Missing or invalid Authorization header")  # Debugging line
             return JSONResponse(
                 status_code=403,
                 content={"detail": "Missing token"}
