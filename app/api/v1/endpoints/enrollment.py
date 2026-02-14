@@ -25,7 +25,7 @@ async def enroll_user(data:EnrollmentCreate,background_tasks: BackgroundTasks, d
     "Enrollment Confirmation",
     "enrollmentTemplate",
     {
-        "studentName": data.name,
+        "studentName": data.user_name,
         "courseName":data.course_name,
         "enrollmentId":enrollment.id
 
