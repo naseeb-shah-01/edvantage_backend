@@ -9,7 +9,7 @@ class CourseOut(BaseModel):
     category: Optional[str]
     instructor_id: int
     price: int
-    duration: Optional[int]
+    duration: Optional[str]
     is_published: bool
     is_free: bool
     created_at: datetime
