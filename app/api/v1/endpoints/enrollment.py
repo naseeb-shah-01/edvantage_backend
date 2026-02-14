@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.schemas.enrollment import EnrollmentCreate, EnrollmentResponse,EnrollmentOut
 from app.db.session import get_db
 from app.services.enroll_service import EnrollService
+from app.services.email import send_email_service
 from typing import List
 from fastapi import BackgroundTasks
 
