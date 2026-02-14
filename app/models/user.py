@@ -34,6 +34,8 @@ class User(Base):
     whatsapp=Column(String, nullable=True)
     collage=Column(String, nullable=True)
     interest=Column(JSONB,nullable=True)
+    reset_token = Column(String, nullable=True)
+    reset_token_expires = Column(DateTime, nullable=True)
     user_type = Column(Enum(UserType,name="user_type"),nullable=False)
 
     created_at = Column(DateTime, server_default=func.now(), nullable=False)

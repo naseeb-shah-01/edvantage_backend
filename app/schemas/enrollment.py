@@ -13,6 +13,7 @@ class CourseOut(BaseModel):
     is_published: bool
     is_free: bool
     created_at: datetime
+    image: Optional[str]
 
     class Config:
         from_attributes = True
@@ -25,6 +26,9 @@ class Enrollment(BaseModel):
 class EnrollmentCreate(BaseModel):
     user_id: int
     course_id: int
+    user_name:str
+    email:str
+    course_name:str
 class EnrollmentResponse(Enrollment):
     id: int
 

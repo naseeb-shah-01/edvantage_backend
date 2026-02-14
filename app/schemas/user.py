@@ -34,6 +34,8 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+class ForgetPasswordRequest(BaseModel):
+    email: EmailStr
 class UserResponse(BaseModel):
     id: int
     email: EmailStr

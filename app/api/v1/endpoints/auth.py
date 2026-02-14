@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.schemas.user import UserCreate, UserResponse, UserLogin
+from app.schemas.user import UserCreate, UserResponse, UserLogin,ForgetPasswordRequest
 from app.core.security import hash_password, verify_password, create_access_token
 from app.db.session import get_db  # Import from our new file
 from app.models.user import User
 from app.models.address import Address 
-from app.services.email import EmailService # Clean import
+from app.services.email import send_email_service
+from app.core.security import create_reset_token, verify_reset_token
+from fastapi import BackgroundTasks
+
 
 router = APIRouter()
 
@@ -15,7 +18,7 @@ router = APIRouter()
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED
 )
-async def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
+async def register_user(user_data: UserCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """Register a new user with optional addresses"""
 
     # 🔹 Check if user already exists
@@ -81,12 +84,19 @@ async def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
     db.commit()
     db.refresh(new_user)
-    emailService=EmailService()
-    # await emailService.send_student_welcome(
-    #     new_user.email,
-    #     new_user.full_name,
-    #     new_user.id
-    # )
+    background_tasks.add_task(
+    send_email_service,   # 👈 NO ()
+    new_user.email,
+    "Welcome To Edvantage",
+    "welcomeTemplate",
+    {
+        "studentName": new_user.full_name,
+        "studentId": str(new_user.id),
+        "studentEmail": new_user.email,
+    }
+)
+
+    
 
 
     return {"access_token":access_token, **new_user.__dict__}
@@ -125,4 +135,67 @@ async def login_user(
             "name": user.full_name,
             "role": user.role
         }
+    }
+
+@router.post("/forgot-password")
+async def forgot_password(data: ForgetPasswordRequest,background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    """Initiate password reset process"""
+    user = db.query(User).filter(User.email == data.email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User with this email does not exist"
+        )
+
+    # 🔐 CREATE RESET TOKEN
+    reset_token = create_reset_token(user.email)
+    
+
+    # 🔗 Construct reset link (example)
+   
+    # 📧 Send email with reset instructions
+    background_tasks.add_task(
+    send_email_service,   # 👈 NO ()
+    user.email,
+    "Password Reset Instructions",
+    "passwordResetTemplate",
+    {"name":user.full_name,"reset_token":reset_token}
+    
+)
+    
+    
+        # user.email,
+        # user.full_name,
+        # reset_token
+    
+
+    return {
+        "message": "Password reset instructions have been sent to your email"
+    }
+@router.post("/reset-password")
+async def reset_password(token: str, new_password: str, db: Session = Depends(get_db)):
+    """Reset password using the provided token"""
+    email = verify_reset_token(token)
+
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired reset token"
+        )
+
+    user = db.query(User).filter(User.email == email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    # 🔐 Update password
+    user.password_hash=hash_password(new_password),
+    db.commit()
+
+    return {
+        "message": "Password has been reset successfully"
     }

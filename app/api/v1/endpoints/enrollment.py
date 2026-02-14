@@ -4,12 +4,13 @@ from app.schemas.enrollment import EnrollmentCreate, EnrollmentResponse,Enrollme
 from app.db.session import get_db
 from app.services.enroll_service import EnrollService
 from typing import List
+from fastapi import BackgroundTasks
 
 
 router = APIRouter()
 
 @router.post("/user", response_model=EnrollmentResponse, status_code=201, summary="Enroll a user in a course", description="Enroll a user in a specified course.")
-async def enroll_user(data:EnrollmentCreate, db: Session = Depends(get_db)):
+async def enroll_user(data:EnrollmentCreate,background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     # Logic to enroll a user in a course
     user_id = data.user_id
     course_id = data.course_id
@@ -17,6 +18,20 @@ async def enroll_user(data:EnrollmentCreate, db: Session = Depends(get_db)):
     enroll_service = EnrollService(db)
     try:
         enrollment = enroll_service.enroll_user(user_id, course_id)
+        background_tasks.add_task(
+    send_email_service,   # 👈 NO ()
+    data.email,
+    "Enrollment Confirmation",
+    "enrollmentTemplate",
+    {
+        "studentName": data.name,
+        "courseName":data.course_name,
+        "enrollmentId":enrollment.id
+
+        
+    }
+)
+
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return enrollment
