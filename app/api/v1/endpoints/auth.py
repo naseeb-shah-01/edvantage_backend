@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.schemas.user import UserCreate, UserResponse, UserLogin,ForgetPasswordRequest
+from app.schemas.user import UserCreate, UserResponse, UserLogin,ForgetPasswordRequest,ResetPasswordRequest
 from app.core.security import hash_password, verify_password, create_access_token
 from app.db.session import get_db  # Import from our new file
 from app.models.user import User
@@ -174,9 +174,9 @@ async def forgot_password(data: ForgetPasswordRequest,background_tasks: Backgrou
         "message": "Password reset instructions have been sent to your email"
     }
 @router.post("/reset-password")
-async def reset_password(token: str, new_password: str, db: Session = Depends(get_db)):
+async def reset_password(data:ResetPasswordRequest, db: Session = Depends(get_db)):
     """Reset password using the provided token"""
-    email = verify_reset_token(token)
+    email = verify_reset_token(data.token)
 
     if not email:
         raise HTTPException(
@@ -193,7 +193,7 @@ async def reset_password(token: str, new_password: str, db: Session = Depends(ge
         )
 
     # 🔐 Update password
-    user.password_hash=hash_password(new_password),
+    user.password_hash=hash_password(data.new_password),
     db.commit()
 
     return {
