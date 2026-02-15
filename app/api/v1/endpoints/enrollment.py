@@ -15,7 +15,7 @@ async def enroll_user(data:EnrollmentCreate,background_tasks: BackgroundTasks, d
     # Logic to enroll a user in a course
     user_id = data.user_id
     course_id = data.course_id
-    print(f"Enrolling user {user_id} in course {course_id}")
+    
     enroll_service = EnrollService(db)
     try:
         enrollment = enroll_service.enroll_user(user_id, course_id)

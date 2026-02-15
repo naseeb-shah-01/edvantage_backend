@@ -16,5 +16,5 @@ router = APIRouter()
 def getCourseDetailsByEnrollmentId(request:Request,enrollment_id: int,db = Depends(get_db)):
     
     enroll=EnrollService(db).get_enrollment_by_id(enrollment_id)
-    print("Enrollment fetched:", enroll)
+    
     return enroll

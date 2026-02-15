@@ -43,7 +43,7 @@ class EnrollService:
             )
             .all()
         )
-        print("Fetched enrollments:", enrollments)
+        
         return enrollments  
 
     

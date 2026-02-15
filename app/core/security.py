@@ -4,6 +4,11 @@ from typing import Optional
 
 from jose import jwt
 
+SECRET_KEY = "your-secret-key"   # move to .env in real projects
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 300
+RESET_TOKEN_EXPIRE_MINUTES=30
+
 # Setup password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -19,10 +24,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 
-SECRET_KEY = "your-secret-key"   # move to .env in real projects
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 300
-RESET_TOKEN_EXPIRE_MINUTES=30
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):

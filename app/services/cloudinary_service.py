@@ -44,7 +44,7 @@ class CloudinaryService:
                 "height": upload_result.get("height"),
                 "created_at": upload_result.get("created_at")
             }
-            print("Uploaded succeffully")
+            
            
             return res
             

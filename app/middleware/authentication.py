@@ -14,7 +14,7 @@ PUBLIC_PATHS = {
     "/auth/login",
     "/api/v1/auth/register",
     "/api/v1/courses","/api/v1/courses"
-    "/courses","/api/v1/auth/forgot-password","api/v1/auth/reset-password"
+    "/courses","/api/v1/auth/forgot-password","/api/v1/auth/reset-password"
 }
 
 class TokenMiddleware(BaseHTTPMiddleware):
@@ -28,7 +28,7 @@ class TokenMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         auth_header = request.headers.get("Authorization")
-        print(f"Authorization header: {auth_header}")  # Debugging line
+        
 
         if not auth_header or not auth_header.startswith("Bearer "):
             print("Missing or invalid Authorization header")  # Debugging line

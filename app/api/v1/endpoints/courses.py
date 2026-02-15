@@ -47,14 +47,14 @@ async def get_course_all( db: Session = Depends(get_db)):
 
 @router.get("/all-details/{id}", response_model=CourseResponseWithSections, status_code=status.HTTP_200_OK,)
 async def get_course(id: int, db: Session = Depends(get_db)):
-    print("Fetching course with ID:", id)
+    
     course = CourseService.get_course_with_sections_and_lessons(db, id)
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
     return course    
 @router.get("/{id}", response_model=CourseResponse, status_code=status.HTTP_200_OK,)
 async def get_course(id: int, db: Session = Depends(get_db)):
-    print("Fetching course with ID:", id)
+    
     course = CourseService.get_course(db, id)
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")

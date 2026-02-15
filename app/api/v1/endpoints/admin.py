@@ -84,8 +84,7 @@ async def upload_file(
     media_repo.createMedia(media_data)
     return result
 
-from fastapi import HTTPException, Depends
-from sqlalchemy.orm import Session
+
 
 @admin_router.post("/delete", tags=["Admin"])
 async def delete_file(
@@ -121,3 +120,5 @@ async def delete_file(
         "cloudinary_error": cloudinary_error
     }
 
+
+        

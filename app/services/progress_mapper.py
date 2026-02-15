@@ -14,7 +14,7 @@ class ProgressMapperService:
         mapped_progress = []
 
         for progress in self.progress_records:
-            print("Mapping progress record:", progress)
+            
             record = {
                 "id": progress.id,
                 "trackable_type": progress.trackable_type,

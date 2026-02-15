@@ -7,7 +7,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 
  # ✅ IMPORT SAME BASE
 
-print("User model loaded")
+
 
 
 class UserRole(str, enum.Enum):
