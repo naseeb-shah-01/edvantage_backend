@@ -14,7 +14,7 @@ PUBLIC_PATHS = {
     "/auth/login",
     "/api/v1/auth/register",
     "/api/v1/courses","/api/v1/courses"
-    "/courses","/api/v1/auth/forgot-password"
+    "/courses","/api/v1/auth/forgot-password","api/v1/auth/reset-password"
 }
 
 class TokenMiddleware(BaseHTTPMiddleware):
