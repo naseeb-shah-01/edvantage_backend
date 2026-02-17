@@ -39,6 +39,22 @@ class ForgetPasswordRequest(BaseModel):
 class ResetPasswordRequest(BaseModel):
     token:str
     new_password:str = Field(..., min_length=8)
+
+
+class UserResponseWithOutToken(BaseModel):
+    id: int
+    email: EmailStr
+    full_name: str
+    contact: Optional[str]
+    whatsapp: Optional[str]
+    collage: Optional[str]
+    expertise: Optional[list[str]]
+
+    role: UserRole
+    is_active: bool
+    created_at: datetime
+
+    addresses: List[AddressResponse] = []    
 class UserResponse(BaseModel):
     id: int
     email: EmailStr
