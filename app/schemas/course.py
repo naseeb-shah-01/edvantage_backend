@@ -85,4 +85,10 @@ class CourseResponseWithSections(BaseModel):
 
     class Config:
         from_attributes = True
-   
+class CourseWithName(BaseModel):
+    id: int
+    title: str
+    
+
+    class Config:
+        from_attributes = True

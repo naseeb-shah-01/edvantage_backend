@@ -9,6 +9,7 @@ from app.schemas.media import UploadResponse,StoreMediaEntry
 from app.services.cloudinary_service import CloudinaryService
 from app.repositories.media_repository import MediaRepository
 from app.db.session import get_db 
+from app.schemas.course import CourseWithName
 
 
 
@@ -121,4 +122,11 @@ async def delete_file(
     }
 
 
-        
+@admin_router.get("/all/courses",response_model=list[CourseWithName] ,tags=["Admin"])
+async def get_all_courses(db: Session = Depends(get_db)):
+    """Retrieve all courses from the database"""
+    try:
+        courses = AdminService(db).get_all_courses()
+        return courses
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

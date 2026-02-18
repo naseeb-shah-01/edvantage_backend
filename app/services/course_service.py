@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session,joinedload
 from slugify import slugify
 
 from app.models.course import Course
-from app.schemas.course import CourseCreate
+from app.schemas.course import CourseCreate,CourseWithName
 from app.models.coursesection import CourseSection
 
 class CourseService:
@@ -71,3 +71,6 @@ class CourseService:
         db.refresh(course)
 
         return course
+
+def get_all_courses(db: Session) -> list[CourseWithName]:
+    return CourseService.get_all_courses(db)
