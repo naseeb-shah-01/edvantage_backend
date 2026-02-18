@@ -77,4 +77,15 @@ class EnrollService:
             "course": enrollment.course,
             "progress_records": mapped_progress
         }
+    def get_course_id_with_user_details(self, course_id: int) -> List[EnrollmentOut]:
+        enrollments = (
+            self.db_session.query(Enrollment)
+            .filter_by(course_id=course_id).options(
+                joinedload(Enrollment.user)  
+            )
+            .all()
+        )
+        
+        
+        return enrollments
 

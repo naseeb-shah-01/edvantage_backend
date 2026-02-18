@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException,status
 from sqlalchemy.orm import Session
-from app.schemas.enrollment import EnrollmentCreate, EnrollmentResponse,EnrollmentOut
+from app.schemas.enrollment import EnrollmentCreate, EnrollmentResponse,EnrollmentOut,EnrollmentWithUserDetails
 from app.db.session import get_db
 from app.services.enroll_service import EnrollService
 from app.services.email import send_email_service
@@ -50,3 +50,37 @@ async def get_user_enrollments(user_id: int, db: Session = Depends(get_db)):
     # Logic to get all enrollments for a user
     enrollments = EnrollService(db).get_enrollment_with_course(user_id)
     return enrollments   
+
+
+
+@router.get(
+    "/course/{course_id}/users",
+    response_model=List[EnrollmentWithUserDetails],
+    summary="Get course enrollments",
+    description="Retrieve all users enrolled in a specific course."
+)
+async def get_course_enrollments(
+    course_id: int,
+    db: Session = Depends(get_db)
+):
+    try:
+        enrollments = EnrollService(db).get_course_id_with_user_details(course_id)
+
+        if not enrollments:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No enrollments found for this course"
+            )
+
+        return enrollments
+
+    except HTTPException:
+        # re-raise HTTP exceptions
+        raise
+
+    except Exception as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong while fetching enrollments"
+        )

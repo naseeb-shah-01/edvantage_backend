@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
+from app.schemas.user import UserResponseWithOutAddress
 
 from datetime import datetime
 class CourseOut(BaseModel):
@@ -40,6 +41,15 @@ class EnrollmentOut(BaseModel):
     progress: int
     enrolled_at: datetime
     course: CourseOut   # 👈 nested course
+
+    class Config:
+        from_attributes = True
+class EnrollmentWithUserDetails(BaseModel):
+    id: int
+    course_id: int
+    progress: int
+    enrolled_at: datetime
+    user: UserResponseWithOutAddress   # 👈 nested user details
 
     class Config:
         from_attributes = True

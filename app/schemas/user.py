@@ -55,6 +55,20 @@ class UserResponseWithOutToken(BaseModel):
     created_at: datetime
 
     addresses: List[AddressResponse] = []    
+
+class UserResponseWithOutAddress(BaseModel):
+    id: int
+    email: EmailStr
+    full_name: str
+    contact: Optional[str]
+    whatsapp: Optional[str]
+    collage: Optional[str]
+    
+
+
+
+    
+
 class UserResponse(BaseModel):
     id: int
     email: EmailStr
