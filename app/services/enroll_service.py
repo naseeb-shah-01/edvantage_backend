@@ -27,9 +27,7 @@ class EnrollService:
         self.db_session.commit()
         self.db_session.refresh(new_enrollment)
         # Initialize progress tracking for the enrolled user
-        progress_service = ProgressService(self.db_session)
-        progress_service.createProgressViaCourseId(user_id, course_id,new_enrollment.id)
-
+       
 
         
 
